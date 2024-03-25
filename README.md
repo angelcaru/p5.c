@@ -4,7 +4,6 @@ WASM interface for [p5.js](https://p5js.org) designed to be used from C.
 ## Quick Start
 ```console
 $ make
-$ cd web
 $ python3 -m http.server 6969 &
 $ iexplore.exe localhost:6969/?dvd.wasm
 ```

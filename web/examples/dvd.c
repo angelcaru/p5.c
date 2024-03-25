@@ -16,7 +16,7 @@ p5_Image img = {0};
 
 void setup() {
     createCanvas(WIDTH, HEIGHT);
-    loadImage("/assets/dvd.png", &img);
+    loadImage("/web/assets/dvd.png", &img);
 }
 
 void draw() {

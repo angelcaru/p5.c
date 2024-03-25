@@ -320,7 +320,8 @@ function preload() {
 
         __indirect_function_table: new WebAssembly.Table({ initial: 4, element: "anyfunc" }),
     });
-    WebAssembly.instantiateStreaming(fetch(document.location.search.slice(1)), {
+    const wasm_file = "/web/" + document.location.search.slice(1);
+    WebAssembly.instantiateStreaming(fetch(wasm_file), {
         env,
     }).then(w => {
         wasm = w;
