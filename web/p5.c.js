@@ -118,7 +118,10 @@ function allocStruct(wasm, obj, structDef) {
     return ptr;
 }
 
+const ENABLE_TODOS = false;
+
 function createEnv(env) {
+    if (!ENABLE_TODOS) return env;
     let proxy = new Proxy(env, {
         get(env, prop) {
             return prop in env ? env[prop] : (...args) => {
@@ -211,6 +214,9 @@ function preload() {
         point(x, y) {
             grCurr().point(x, y);
         },
+        line(x1, y1, x2, y2) {
+            grCurr().line(x1, y1, x2, y2);
+        },
         rect(x, y, w, h) {
             grCurr().rect(x, y, w, h);
         },
@@ -225,6 +231,19 @@ function preload() {
         },
         noFill() {
             grCurr().noFill();
+        },
+
+        rotate(angle) {
+            grCurr().rotate(angle);
+        },
+        translate(dx, dy) {
+            grCurr().translate(dx, dy);
+        },
+        push() {
+            grCurr().push();
+        },
+        pop() {
+            grCurr().pop();
         },
 
         loadImage(url_ptr, img_ptr) {

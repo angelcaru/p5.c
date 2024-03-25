@@ -1,4 +1,4 @@
-all: web/dvd.wasm web/gol.wasm web/graphics.wasm
+all: web/dvd.wasm web/gol.wasm web/graphics.wasm web/fractree.wasm
 
 web/%.wasm: web/examples/%.c p5.h
 	clang -O3 -target wasm32 \

@@ -32,9 +32,15 @@ void strokeWeight(int weight);
 void circle(int x, int y, int d);
 void ellipse(int x, int y, int w, int h);
 void point(int x, int y);
+void line(int x1, int y1, int x2, int y2);
 void rect(int x, int y, int w, int h);
 void noStroke(void);
 void noFill(void);
+
+void rotate(float angle);
+void translate(int dx, int dy);
+void push(void);
+void pop(void);
 
 // IMAGES
 typedef struct {
