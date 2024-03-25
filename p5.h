@@ -68,6 +68,9 @@ p5_Element createCanvas(int width, int height);
 // Creates a button with the given label
 // Returns: the button
 p5_Element createButton(const char *label);
+// Creates a <p> with the given label
+// Returns: the <p>
+p5_Element createP(const char *label);
 // Call `cb` whenever the mouse is pressed on `elt`
 // `data` is passed to the callback
 void onMousePressed(p5_Element *elt, void (*cb)(void*), void *data);

@@ -118,7 +118,7 @@ function allocStruct(wasm, obj, structDef) {
     return ptr;
 }
 
-const ENABLE_TODOS = false;
+const ENABLE_TODOS = true;
 
 function createEnv(env) {
     if (!ENABLE_TODOS) return env;
@@ -293,6 +293,12 @@ function preload() {
             const btn = createButton(label);
 
             return allocStruct(wasm, { id: domTable.insert(btn) }, STRUCTS["p5_Element"]);
+        },
+        createP(label_ptr) {
+            const label = strFromCstr(exports.memory.buffer, label_ptr);
+            const p = createP(label);
+
+            return allocStruct(wasm, { id: domTable.insert(p) }, STRUCTS["p5_Element"]);
         },
         onMousePressed(elt_ptr, callback_idx, user_data) {
             const callback = env.__indirect_function_table.get(callback_idx);
