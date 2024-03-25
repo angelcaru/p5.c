@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v3
       
       - name: make
-      - run: make all
+        run: make all
 
   deploy:
       # Add a dependency to the build job
