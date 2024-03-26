@@ -10,6 +10,10 @@ typedef unsigned char u8;
 
 #define P5_WHITE 255, 255, 255
 #define P5_BLACK 0, 0, 0
+#define PI 3.1415926f
+
+// MATH
+float sqrtf(float x);
 
 // MEMORY MANAGEMENT
 // Reset the heap
@@ -44,6 +48,7 @@ void pop(void);
 
 // 3D
 void camera1(int x, int y, int z);
+void perspective(float fovy, int aspect, float near, float far);
 void rotateX(float angle);
 void rotateY(float angle);
 void box(int w, int h, int d);

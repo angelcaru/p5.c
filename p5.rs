@@ -63,6 +63,9 @@ mod wasm_panic {
 mod c {
     use p5::{Image, Element, Graphics};
     extern "C" {
+        // MATH
+        pub fn sqrtf(x: f32) -> f32;
+
         // MEMORY MANAGEMENT
         // Reset the heap
         pub fn heapReset();
@@ -77,6 +80,7 @@ mod c {
 
         // 3D
         pub fn camera1(x: i32, y: i32, z: i32);
+        pub fn perspective(fovy: f32, aspect: i32, near: f32, far: f32);
         pub fn rotateX(angle: f32);
         pub fn rotateY(angle: f32);
         pub fn r#box(w: i32, h: i32, d: i32);
@@ -129,6 +133,12 @@ fn validate_cstr(cstr: &[u8]) {
         panic!("invalid c-string");
     }
 }
+
+
+pub fn sqrtf(x: f32) -> f32 {
+    unsafe { c::sqrtf(x) }
+}
+
 
 pub unsafe fn heapReset() {
     c::heapReset()
@@ -200,6 +210,9 @@ pub fn rotateY(angle: f32) {
 }
 pub fn r#box(w: i32, h: i32, d: i32) {
     unsafe { c::r#box(w, h, d) }
+}
+pub fn perspective(fovy: f32, aspect: i32, near: f32, far: f32) {
+    unsafe { c::perspective(fovy, aspect, near, far) }
 }
 
 pub fn rotate(angle: f32) {

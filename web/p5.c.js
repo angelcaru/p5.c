@@ -185,6 +185,10 @@ function preload() {
             throw new Error(msg);
         },
 
+        sqrtf(x) {
+            return Math.sqrt(x);
+        },
+
         heapReset() {
             heap_base = null;
         },
@@ -242,6 +246,9 @@ function preload() {
 
         camera1(x, y, z) {
             grCurr().camera(x, y, z);
+        },
+        perspective(a, b, c, d) {
+            grCurr().perspective(a, b, c, d);
         },
         rotateX(angle) {
             grCurr().rotateX(angle);
