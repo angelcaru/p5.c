@@ -166,6 +166,7 @@ let preloadRan = false;
 
 let exports = null;
 
+let dropdown;
 function preload() {
     const imageTable = createTable("image");
     const domTable = createTable("element");
@@ -376,16 +377,23 @@ function preload() {
 
         __indirect_function_table: new WebAssembly.Table({ initial: 4, element: "anyfunc" }),
     });
+    const dropdown = select("#demo-select");
     const wasm_file = "/web/" + document.location.search.slice(1);
-    WebAssembly.instantiateStreaming(fetch(wasm_file), {
-        env,
-    }).then(w => {
-        wasm = w;
-        exports = w.instance.exports
-        preloadRan = !("preload" in exports);
-    });
-    console.log(env);
+    if (wasm_file !== "/web/") {
+        dropdown.value(wasm_file);
+        WebAssembly.instantiateStreaming(fetch(wasm_file), {
+            env,
+        }).then(w => {
+            wasm = w;
+            exports = w.instance.exports
+            preloadRan = !("preload" in exports);
+        });
+        console.log(env);
+    }
     ///////////////////////////////
+    dropdown.changed(() => {
+        document.location = "/web/?" + dropdown.value();
+    });
 }
 
 function setup() {}
