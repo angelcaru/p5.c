@@ -9,9 +9,13 @@ pub mod p5;
 const WIDTH:  i32 = 400;
 const HEIGHT: i32 = 400;
 
+//static mut song: p5::Sound = p5::Sound::unloaded();
+
+#[allow(static_mut_refs)]
 #[no_mangle]
-pub fn setup() {
+pub unsafe fn setup() {
     p5::createCanvas(WIDTH, HEIGHT);
+//    p5::loadSound(b"/web/assets/crab-rave.mp3\0", &mut song);
 }
 
 #[derive(Clone, Copy)]
@@ -47,6 +51,7 @@ static mut frame_count: i32 = 0;
 #[no_mangle]
 pub unsafe fn draw() {
     p5::background(255, 255, 255);
+//    if !song.loaded { return; }
 
     for i in 0..rect_count {
         let rect = &mut rects[i];

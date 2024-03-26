@@ -53,6 +53,14 @@ void rotateX(float angle);
 void rotateY(float angle);
 void box(int w, int h, int d);
 
+// SOUND
+typedef struct {
+    bool loaded;
+    u8 _id;
+} p5_Sound;
+void loadSound(const char *url, p5_Sound *out);
+void playSound(p5_Sound *sound);
+
 // IMAGES
 typedef struct {
     bool loaded;

@@ -30,6 +30,10 @@ const STRUCTS = {
         ["height", "int"],
         ["id", "u8"], // ID has to be at the end because of byte alignment
     ],
+    "p5_Sound": [
+        ["loaded", "bool"],
+        ["id", "u8"],
+    ],
 };
 
 function readInt(buf, ptr, size) {
@@ -169,6 +173,7 @@ let exports = null;
 let dropdown;
 function preload() {
     const imageTable = createTable("image");
+    const soundTable = createTable("sound");
     const domTable = createTable("element");
     const grTable = createTable("graphics");
 
@@ -182,7 +187,6 @@ function preload() {
     const env = createEnv({
         _wasm_panic(msg_ptr) {
             const msg = strFromCstr(exports.memory.buffer, msg_ptr);
-            console.error(msg);
             throw new Error(msg);
         },
 
@@ -272,6 +276,36 @@ function preload() {
         },
         pop() {
             grCurr().pop();
+        },
+
+        loadSound(url_ptr, sound_ptr) {
+            const buf = exports.memory.buffer;
+            const url = strFromCstr(buf, url_ptr);
+            const soundStruct = readStructPtr(buf, sound_ptr, STRUCTS["p5_Sound"]);
+
+            if (soundStruct.loaded) {
+                console.error(
+                    `Attempt to load sound from url ${url} into already used p5_Sound struct`);
+                return;
+            }
+
+            loadSound(url, sound => {
+                const id = soundTable.insert(sound);
+                soundStruct.id = id;
+                soundStruct.loaded = 1;
+                writeStruct(buf, sound_ptr, soundStruct, STRUCTS["p5_Sound"]);
+                // TODO: some way to tell that the sound errored from C
+            }, err => console.error(`Error loading sound from ${url}:`, err));
+        },
+        playSound(sound_ptr) {
+            const buf = exports.memory.buffer;
+            const { id, loaded } = readStructPtr(buf, img_ptr, STRUCTS["p5_Sound"]);
+
+            if (!loaded) {
+                throw new Error("Attempt to play unloaded sound");
+            } else {
+                soundTable.get(id).play();
+            }
         },
 
         loadImage(url_ptr, img_ptr) {
@@ -408,7 +442,8 @@ function draw() {
             setupRan = true;
         }
         exports.draw();
-    } catch (_) {
+    } catch (err) {
+        console.error(err);
         noLoop();
     }
 }

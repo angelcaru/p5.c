@@ -16,6 +16,17 @@ pub struct Graphics {
     pub height: i32,
     _id: i32,
 }
+// SOUND
+#[repr(C)]
+pub struct Sound {
+    pub loaded: bool,
+    _id: u8,
+}
+impl Sound {
+    pub const fn unloaded() -> Self {
+        Self { loaded: false, _id: 0 }
+    }
+}
 
 mod wasm_panic {
     use core::fmt::Write;
@@ -61,7 +72,7 @@ mod wasm_panic {
 }
 
 mod c {
-    use p5::{Image, Element, Graphics};
+    use p5::{Image, Element, Graphics, Sound};
     extern "C" {
         // MATH
         pub fn sqrtf(x: f32) -> f32;
@@ -103,6 +114,10 @@ mod c {
         pub fn translate(dx: i32, dy: i32);
         pub fn push();
         pub fn pop();
+
+        // SOUND
+        pub fn loadSound(url: *const u8, out: *mut Sound);
+        pub fn playSound(sound: *const Sound);
 
         // IMAGES
         // TODO: loadImageSync() that does the same as loadImage() but blocking
@@ -226,6 +241,14 @@ pub fn push() {
 }
 pub fn pop() {
     unsafe { c::pop() }
+}
+
+pub fn loadSound(url: &[u8], out: &mut Sound) {
+    validate_cstr(url);
+    unsafe { c::loadSound(url.as_ptr(), out as *mut _) }
+}
+pub fn playSound(sound: &Sound) {
+    unsafe { c::playSound(sound as *const _) }
 }
 
 // IMAGES
