@@ -13,7 +13,7 @@ web/%.wasm: web/examples/%.c p5.h
 # the same linker as `clang`. We need to either:
 #   A. figure it out
 #   B. remove function pointers from the library
-web/%.wasm: web/examples/%.rs
+web/%.wasm: web/examples/%.rs p5.rs
 	rustc --crate-type bin --target=wasm32-unknown-unknown \
 		-Clink-args="--allow-undefined --no-entry --export=__heap_base" \
 	    -o web/rust.wasm web/examples/rust.rs
