@@ -42,6 +42,12 @@ void translate(int dx, int dy);
 void push(void);
 void pop(void);
 
+// 3D
+void camera1(int x, int y, int z);
+void rotateX(float angle);
+void rotateY(float angle);
+void box(int w, int h, int d);
+
 // IMAGES
 typedef struct {
     bool loaded;
@@ -65,6 +71,9 @@ typedef struct {
 // Creates a canvas with the given width and height
 // Returns: the canvas
 p5_Element createCanvas(int width, int height);
+// Creates a canvas in WEBGL mode with the given width and height
+// Returns: the canvas
+p5_Element createCanvas3d(int width, int height);
 // Creates a button with the given label
 // Returns: the button
 p5_Element createButton(const char *label);

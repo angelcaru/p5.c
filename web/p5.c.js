@@ -240,6 +240,19 @@ function preload() {
             grCurr().noFill();
         },
 
+        camera1(x, y, z) {
+            grCurr().camera(x, y, z);
+        },
+        rotateX(angle) {
+            grCurr().rotateX(angle);
+        },
+        rotateY(angle) {
+            grCurr().rotateY(angle);
+        },
+        box(w, h, d) {
+            grCurr().box(w, h, d);
+        },
+
         rotate(angle) {
             grCurr().rotate(angle);
         },
@@ -293,6 +306,10 @@ function preload() {
 
         createCanvas(width, height) {
             const canvas = createCanvas(width, height);
+            return allocStruct(wasm, { id: domTable.insert(canvas) }, STRUCTS["p5_Element"]);
+        },
+        createCanvas3d(width, height) {
+            const canvas = createCanvas(width, height, WEBGL);
             return allocStruct(wasm, { id: domTable.insert(canvas) }, STRUCTS["p5_Element"]);
         },
         createButton(label_ptr) {

@@ -75,6 +75,12 @@ mod c {
         pub fn mouseX() -> i32;
         pub fn mouseY() -> i32;
 
+        // 3D
+        pub fn camera1(x: i32, y: i32, z: i32);
+        pub fn rotateX(angle: f32);
+        pub fn rotateY(angle: f32);
+        pub fn r#box(w: i32, h: i32, d: i32);
+
         // DRAWING
         pub fn background(r: u8, g: u8, b: u8);
         pub fn fill(r: u8, g: u8, b: u8);
@@ -180,6 +186,20 @@ pub fn noStroke() {
 }
 pub fn noFill() {
     unsafe { c::noFill() }
+}
+
+// 3D
+pub fn camera1(x: i32, y: i32, z: i32) {
+    unsafe { c::camera1(x, y, z) }
+}
+pub fn rotateX(angle: f32) {
+    unsafe { c::rotateX(angle) }
+}
+pub fn rotateY(angle: f32) {
+    unsafe { c::rotateY(angle) }
+}
+pub fn r#box(w: i32, h: i32, d: i32) {
+    unsafe { c::r#box(w, h, d) }
 }
 
 pub fn rotate(angle: f32) {
