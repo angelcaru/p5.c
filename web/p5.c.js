@@ -124,6 +124,7 @@ function createEnv(env) {
     if (!ENABLE_TODOS) return env;
     let proxy = new Proxy(env, {
         get(env, prop) {
+//            console.log(`WASM module tried to call ${prop}...`);
             return prop in env ? env[prop] : (...args) => {
                 console.error(`NOT IMPLEMENTED: ${prop}(${args.join(", ")})`);
                 noLoop();
@@ -178,6 +179,12 @@ function preload() {
     }
 
     const env = createEnv({
+        _wasm_panic(msg_ptr) {
+            const msg = strFromCstr(exports.memory.buffer, msg_ptr);
+            console.error(msg);
+            throw new Error(msg);
+        },
+
         heapReset() {
             heap_base = null;
         },
@@ -362,10 +369,14 @@ function setup() {}
 function draw() {
     if (wasm == null) return;
 
-    if (!preloadRan) exports.preload();
-    if (!setupRan) {
-        exports.setup();
-        setupRan = true;
+    try {
+        if (!preloadRan) exports.preload();
+        if (!setupRan) {
+            exports.setup();
+            setupRan = true;
+        }
+        exports.draw();
+    } catch (_) {
+        noLoop();
     }
-    exports.draw();
 }

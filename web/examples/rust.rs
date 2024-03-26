@@ -1,4 +1,5 @@
 #![no_main]
+#![no_std]
 //#![allow(normal_naming_conventions)]
 #![allow(non_upper_case_globals)]
 
@@ -43,8 +44,6 @@ static mut rect_count: usize = 0;
 
 static mut frame_count: i32 = 0;
 
-static mut notified: bool = false;
-
 #[no_mangle]
 pub unsafe fn draw() {
     p5::background(255, 255, 255);
@@ -63,9 +62,8 @@ pub unsafe fn draw() {
     if rect_count < RECT_CAP && frame_count % 2 == 0 {
         rects[rect_count] = Rect::random();
         rect_count += 1;
-    } else if rect_count >= RECT_CAP && !notified {
-        p5::createP(b"DONE\0");
-        notified = true;
+    } else if rect_count >= RECT_CAP {
+        panic!("rect overflow");
     }
 
     frame_count += 1;
