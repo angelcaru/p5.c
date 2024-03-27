@@ -434,6 +434,11 @@ function preload() {
             const gr = grTable.get(id);
             grCurr().image(gr, x, y, w, h);
         },
+        copy(gr_ptr, sx, sy, sw, sh, dx, dy, dw, dh) {
+            const { id } = readStruct(exports.memory.buffer, gr_ptr, STRUCTS["p5_Graphics"]);
+            const gr = grTable.get(id);
+            grCurr().copy(gr, sx, sy, sw, sh, dx, dy, dw, dh);
+        },
 
         __indirect_function_table: new WebAssembly.Table({ initial: 69, element: "anyfunc" }),
     });

@@ -122,6 +122,7 @@ p5_Graphics createGraphics(int width, int height);
 void graphicsBegin(p5_Graphics *gr);
 void graphicsEnd();
 void render(p5_Graphics gr, int x, int y, int w, int h);
+void copy(p5_Graphics *gr, int sx, int sy, int sw, int sh, int dx, int dy, int dw, int dh);
 
 #endif // P5_H_
 

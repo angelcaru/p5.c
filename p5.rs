@@ -149,6 +149,7 @@ pub mod c {
         pub fn graphicsBegin(gr: *mut Graphics);
         pub fn graphicsEnd();
         pub fn render(gr: *const Graphics, x: i32, y: i32, w: i32, h: i32);
+        pub fn copy(gr: *const Graphics, sx: i32, sy: i32, sw: i32, sh: i32, dx: i32, dy: i32, dw: i32, dh: i32);
     }
 }
 
@@ -326,4 +327,9 @@ pub fn graphicsEnd() {
 }
 pub fn render(gr: &Graphics, x: i32, y: i32, w: i32, h: i32) {
     unsafe { c::render(gr as *const _, x, y, w, h) }
+}
+pub fn copy(gr: *const Graphics, 
+            sx: i32, sy: i32, sw: i32, sh: i32, 
+            dx: i32, dy: i32, dw: i32, dh: i32) {
+    unsafe { c::copy(gr as *const _, sx, sy, sw, sh, dx, dy, dw, dh) }
 }

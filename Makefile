@@ -1,6 +1,7 @@
 all: web/dvd.wasm web/gol.wasm web/graphics.wasm \
 	web/fractree.wasm web/rust.wasm web/3d.wasm \
-	web/pixels.wasm web/rbutton.wasm web/voronoi.wasm
+	web/pixels.wasm web/rbutton.wasm web/voronoi.wasm \
+	web/reveal.wasm
 
 web/%.wasm: web/examples/%.c p5.h
 	clang -O3 -target wasm32 \
