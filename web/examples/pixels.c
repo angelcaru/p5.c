@@ -14,7 +14,11 @@ void draw(void) {
     loadPixels(pixels);
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
-                pixels[y * WIDTH + x] = color(0, x * 255 / WIDTH, y * 255 / HEIGHT, 255);
+                pixels[y * WIDTH + x] = color(
+                        255 - x * 255 / WIDTH,
+                        x * 255 / WIDTH,
+                        y * 255 / HEIGHT,
+                        255);
             }
         }
     updatePixels(pixels);
