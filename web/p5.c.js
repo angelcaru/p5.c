@@ -100,6 +100,14 @@ function structSize(structDef) {
     return result;
 }
 
+function memcpy(dstBuf, dstPtr, srcBuf, srcPtr, size) {
+    const dstArr = new Uint8Array(dstBuf, dstPtr);
+    const srcArr = new Uint8Array(srcBuf, srcPtr);
+    for (let i = 0; i < size; i++) {
+        dstArr[i] = srcArr[i];
+    }
+}
+
 let heap_base = null;
 function alloc(wasm, size) {
     const exports = wasm.instance.exports;
@@ -276,6 +284,24 @@ function preload() {
         },
         pop() {
             grCurr().pop();
+        },
+
+        pixelDensity(density) {
+            grCurr().pixelDensity(density);
+        },
+        loadPixels(arr_ptr) {
+            grCurr().loadPixels();
+            
+            memcpy(exports.memory.buffer, arr_ptr,
+                   grCurr().pixels.buffer, 0,
+                   grCurr().width * grCurr().height * grCurr().pixelDensity() * 4);
+        },
+        updatePixels(arr_ptr) {
+            memcpy(grCurr().pixels.buffer, 0,
+                   exports.memory.buffer, arr_ptr,
+                   grCurr().width * grCurr().height * grCurr().pixelDensity() * 4);
+
+            grCurr().updatePixels();
         },
 
         loadSound(url_ptr, sound_ptr) {

@@ -71,7 +71,7 @@ mod wasm_panic {
     }
 }
 
-mod c {
+pub mod c {
     use p5::{Image, Element, Graphics, Sound};
     extern "C" {
         // MATH
@@ -114,6 +114,12 @@ mod c {
         pub fn translate(dx: i32, dy: i32);
         pub fn push();
         pub fn pop();
+
+        // PIXELS
+        // TODO: provide a non-`unsafe` interface for these functions
+        pub fn pixelDensity(density: i32);
+        pub fn loadPixels(pixels: *mut u32);
+        pub fn updatePixels(pixels: *const u32);
 
         // SOUND
         pub fn loadSound(url: *const u8, out: *mut Sound);

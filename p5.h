@@ -2,9 +2,10 @@
 #define P5_H_
 
 #include <stdbool.h>
+#include <stdint.h>
 #define NULL ((void*)0)
 
-typedef unsigned char u8;
+typedef uint8_t u8;
 
 #define P5_SIG_COLOR u8 r, u8 g, u8 b
 
@@ -45,6 +46,18 @@ void rotate(float angle);
 void translate(int dx, int dy);
 void push(void);
 void pop(void);
+
+// PIXELS
+// AABBGGRR
+#define color(r, g, b, a) ( \
+          ((r)&0xFF)<<(8*0) \
+        | ((g)&0xFF)<<(8*1) \
+        | ((b)&0xFF)<<(8*2) \
+        | ((a)&0xFF)<<(8*3) )
+void pixelDensity(int density);
+void loadPixels(uint32_t *pixels);
+void updatePixels(const uint32_t *pixels);
+
 
 // 3D
 void camera1(int x, int y, int z);
