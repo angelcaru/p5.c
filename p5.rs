@@ -24,7 +24,10 @@ pub struct Sound {
 }
 impl Sound {
     pub const fn unloaded() -> Self {
-        Self { loaded: false, _id: 0 }
+        Self {
+            loaded: false,
+            _id: 0,
+        }
     }
 }
 
@@ -72,7 +75,7 @@ mod wasm_panic {
 }
 
 pub mod c {
-    use p5::{Image, Element, Graphics, Sound};
+    use p5::{Element, Graphics, Image, Sound};
     extern "C" {
         // MATH
         pub fn sqrtf(x: f32) -> f32;
@@ -138,7 +141,7 @@ pub mod c {
         pub fn createCanvas(width: i32, height: i32) -> Element;
         pub fn createButton(label: *const u8) -> Element;
         pub fn createP(label: *const u8) -> Element;
-//        pub fn onMousePressed(elt: *mut Element, cb: extern fn(*mut ()) -> (), data: *mut ());
+        pub fn onMousePressed(elt: *mut Element, cb: extern "C" fn(*mut ()) -> (), data: *mut ());
         pub fn setHTML(elt: *mut Element, data: *const u8);
 
         // GRAPHICS
@@ -155,11 +158,9 @@ fn validate_cstr(cstr: &[u8]) {
     }
 }
 
-
 pub fn sqrtf(x: f32) -> f32 {
     unsafe { c::sqrtf(x) }
 }
-
 
 pub unsafe fn heapReset() {
     c::heapReset()
@@ -288,10 +289,25 @@ pub fn createP(label: &[u8]) -> Element {
     validate_cstr(label);
     unsafe { c::createP(label.as_ptr()) }
 }
-// NOTE: rustc linker sucks so no callbacks for us
-//        pub fn onMousePressed(elt: *mut Element, cb: fn(*mut ()) -> (), data: *mut ()) {
-//            unsafe { c::onMousePressed(elt: *mut Element, cb: fn(*mut ()) -> (), data: *mut ()) }
-//        }
+
+impl Element {
+    pub fn mousePressed<T: FnMut()>(&mut self, mut cb: T) {
+        extern "C" fn _callback<T: FnMut()>(cb: *mut ()) {
+            let cb = unsafe {
+                let cb: *mut T = core::mem::transmute(cb);
+                &mut *cb
+            };
+
+            cb();
+        }
+
+        unsafe {
+            let cbp = &mut cb as *mut T;
+            core::mem::forget(cb);
+            c::onMousePressed(self as *mut _, _callback::<T>, core::mem::transmute(cbp));
+        }
+    }
+}
 pub fn setHTML(elt: &mut Element, data: &[u8]) {
     validate_cstr(data);
     unsafe { c::setHTML(elt as *mut _, data.as_ptr()) }

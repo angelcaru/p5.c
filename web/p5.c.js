@@ -435,7 +435,7 @@ function preload() {
             grCurr().image(gr, x, y, w, h);
         },
 
-        __indirect_function_table: new WebAssembly.Table({ initial: 4, element: "anyfunc" }),
+        __indirect_function_table: new WebAssembly.Table({ initial: 69, element: "anyfunc" }),
     });
     const dropdown = select("#demo-select");
     const wasm_file = "/web/" + document.location.search.slice(1);
