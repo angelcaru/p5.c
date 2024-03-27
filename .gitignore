@@ -1,4 +1,5 @@
 *.wat
+*.wasm
 
 #copyright
 crab-rave.mp3
