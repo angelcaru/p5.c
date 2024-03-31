@@ -393,6 +393,7 @@ function preload() {
             return allocStruct(wasm, { id: domTable.insert(p) }, STRUCTS["p5_Element"]);
         },
         onMousePressed(elt_ptr, callback_idx, user_data) {
+            console.log(callback_idx);
             const callback = env.__indirect_function_table.get(callback_idx);
             const { id } = readStructPtr(exports.memory.buffer, elt_ptr, STRUCTS["p5_Element"]);
 
