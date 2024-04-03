@@ -1,0 +1,138 @@
+// WARNING: ALL OF THE ARGMUENTS TO PROCEDURES MUST BE REVERSED IN THE SOURCE CODE
+
+// `print` is an intrinsic so we have to use inline WAT to import and use it
+// TODO: https://github.com/LunaAmora/4orth/issues/3
+//wasm
+//  "(import \"env\" \"print\" (func $print (param i32)))"
+//end
+
+
+include "wasm-core.porth"
+
+proc main in end // main procedure to make the compiler shut tf up
+
+inline proc P5_WHITE -- int int int in 255 255 255 end
+inline proc P5_BLACK -- int int int in 0 0 0 end
+//#define PI 3.1415926f @float
+
+// MATH
+//float sqrtf(float x); @float
+
+// MEMORY MANAGEMENT
+// Reset the heap
+import proc heapReset in end
+
+// CORE
+import proc setFrameRate int -- in end
+import proc random int int -- int in end
+
+// INPUT
+import proc mouseX -- int in end
+import proc mouseY -- int in end
+inline proc mousePos -- int int in mouseX mouseY end
+
+// DRAWING
+import proc background int int int -- in end
+import proc fill int int int -- in end
+import proc fillA int int int int -- in end
+import proc stroke int int int -- in end
+import proc strokeWeight int -- in end
+import proc circle int int int -- in end
+import proc ellipse int int int int -- in end
+import proc point int int -- in end
+import proc line int int int int -- in end
+import proc rect int int int int -- in end
+import proc noStroke in end
+import proc noFill in end
+
+//void rotate(float angle); @float
+import proc translate int int -- in end
+import proc push in end
+import proc pop in end
+
+// PIXELS
+// AABBGGRR
+inline proc color int int int int -- int in
+  let r g b a in
+    r 0xFF 8 0 * shl and
+    g 0xFF 8 1 * shl and or
+    b 0xFF 8 2 * shl and or
+    a 0xFF 8 3 * shl and or
+  end
+end
+import proc pixelDensity int -- in end
+import proc loadPixels ptr -- in end
+import proc updatePixels ptr -- in end
+
+// 3D
+import proc camera1 int int int -- in end
+//void perspective(float fovy, int aspect, float near, float far); @float
+//void rotateX(float angle); @float
+//void rotateY(float angle); @float
+import proc box int int int -- in end
+
+// SOUND
+const p5_Sound.loaded sizeof(bool) offset end
+const p5_Sound.id     sizeof(u8) offset end
+const sizeof(p5_Sound) reset end
+
+inline proc @p5_Sound.loaded ptr -- bool in p5_Sound.loaded ptr+ @bool end
+inline proc @p5_Sound.id ptr -- int      in p5_Sound.id     ptr+ @8    end
+
+import proc loadSound ptr ptr -- in end
+import proc playSound ptr -- in end
+
+// IMAGES
+const p5_Image.loaded sizeof(bool) offset end
+const p5_Image.id     sizeof(u8) offset end
+const sizeof(p5_Image) reset end
+
+inline proc @p5_Image.loaded ptr -- bool in p5_Image.loaded ptr+ @bool end
+inline proc @p5_Image.id ptr -- int      in p5_Image.id     ptr+ @8    end
+// TODO: loadImageSync() that does the same as loadImage() but blocking
+import proc loadImage ptr ptr -- in end
+import proc image int int int int ptr -- in end
+
+// LOGGING
+
+// TODO: https://github.com/LunaAmora/4orth/issues/3
+//inline proc print-i32 int -- in
+//  wasm int -- in
+//    "(call $pop)"
+//    "(call $print)"
+//  end
+//end
+import proc print_str ptr -- in end
+
+// DOM
+// XXX: this header assumes that `p5_Element` is an int, which it has to because it only has
+// one field. This might bite us in the ass later if we add more fields.
+import proc createCanvas int int -- int in end
+import proc createCanvas3d int int -- int in end
+import proc createButton ptr -- int in end
+import proc createP ptr -- int in end
+// TODO: get function pointers working in Porth
+//import proc onMousePressed ptr addr ptr -- in end
+import proc setHTML ptr ptr -- in end
+
+// GRAPHICS
+const p5_Graphics.width sizeof(int) offset end
+const p5_Graphics.height sizeof(int) offset end
+const p5_Graphics.id sizeof(u8) offset end
+const sizeof(p5_Graphics) reset end
+
+inline proc @p5_Graphics.width ptr -- bool in p5_Graphics.width  ptr+ @bool end
+inline proc @p5_Graphics.height ptr -- int in p5_Graphics.height ptr+ @8    end
+inline proc @p5_Graphics.id ptr -- int     in p5_Graphics.id     ptr+ @8    end
+
+// NOTE: this procedure takes a pointer because of WASM calling conventions
+// I thought the Web had already ran out of ass pain after choosing LEB128, but apparently not.
+import proc createGraphics int int ptr -- in end
+import proc graphicsBegin ptr -- in end
+import proc graphicsEnd in end
+import proc render int int int int ptr -- in end
+import proc copy int int int int int int int int ptr -- in end // lmao
+
+export setup "setup"
+export draw "draw"
+
