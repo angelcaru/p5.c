@@ -1,0 +1,38 @@
+include "p5.porth"
+
+inline proc circle-color -- int int int in 255 0 255 end
+
+proc mouse-pressed ptr in
+  drop
+  "Hello!"c print_str
+end
+
+const WIDTH 400 end
+const HEIGHT 400 end
+proc setup in
+  HEIGHT WIDTH createCanvas drop
+  "Written in <a href='https://gitlab.com/tsoding/porth'>Porth</a>!"c createP drop
+end
+
+proc draw in
+  P5_BLACK background
+
+  noStroke
+  circle-color fill
+  50 mousePos swap circle
+
+  circle-color stroke
+  8 strokeWeight
+    mousePos swap
+    0 WIDTH 2 /
+  line
+    mousePos swap
+    HEIGHT WIDTH 2 /
+  line
+    mousePos swap
+    HEIGHT 2 / 0
+  line
+    mousePos swap
+    HEIGHT 2 / WIDTH
+  line
+end
