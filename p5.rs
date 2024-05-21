@@ -318,13 +318,26 @@ pub fn setHTML(elt: &mut Element, data: &[u8]) {
 pub fn createGraphics(width: i32, height: i32) -> Graphics {
     unsafe { c::createGraphics(width, height) }
 }
-// TODO: some smart-ass system using the Drop trait to automagically graphicsEnd()
 pub fn graphicsBegin(gr: &mut Graphics) {
     unsafe { c::graphicsBegin(gr as *mut _) }
 }
 pub fn graphicsEnd() {
     unsafe { c::graphicsEnd() }
 }
+
+pub struct UseGraphics(core::marker::PhantomData<()>);
+
+pub fn use_graphics(gr: &mut Graphics) -> UseGraphics<'_> {
+    graphicsBegin(gr);
+    UseGraphics(core::marker::PhantomData)
+}
+
+impl<'a> core::ops::Drop for UseGraphics<'a> {
+    fn drop(&mut self) {
+        unsafe { c::graphicsEnd() }
+    }
+}
+
 pub fn render(gr: &Graphics, x: i32, y: i32, w: i32, h: i32) {
     unsafe { c::render(gr as *const _, x, y, w, h) }
 }
