@@ -458,7 +458,7 @@ function preload() {
     }
     ///////////////////////////////
     dropdown.changed(() => {
-        document.location = "/web/?" + dropdown.value();
+        document.location = "./?" + dropdown.value();
     });
 }
 
