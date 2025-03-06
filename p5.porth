@@ -19,8 +19,13 @@ inline proc P5_BLACK -- int int int in 0 0 0 end
 //float sqrtf(float x); @float
 
 // MEMORY MANAGEMENT
-// Reset the heap
-import proc heapReset in end
+// We have only a linear allocator for now
+// Make a snapshot of allocator
+import proc allocSnapshot -- ptr in end
+// Restore a snapshot of allocator (frees all memory allocated since the snapshot was taken)
+import proc allocRestore ptr -- in end
+// Allocate some memory
+import proc alloc int -- ptr in end
 
 // CORE
 import proc setFrameRate int -- in end

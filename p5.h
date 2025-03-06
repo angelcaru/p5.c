@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
-#define NULL ((void*)0)
+#include <stddef.h>
 
 typedef uint8_t u8;
 
@@ -13,12 +13,26 @@ typedef uint8_t u8;
 #define P5_BLACK 0, 0, 0
 #define PI 3.1415926f
 
+// MANDATORY FUNCTIONS
+// Every C runtime must have these three functions, since the compiler will generate calls to them even when none are found
+// in the source code
+
+void *memset(void *dst, int byte, size_t count);
+void *memcpy(void *restrict dst, const void *restrict src, size_t count);
+void *memmove(void *dst, const void *src, size_t count);
+
 // MATH
 float sqrtf(float x);
 
 // MEMORY MANAGEMENT
-// Reset the heap
-void heapReset(void);
+// We have only a linear allocator for now
+typedef uintptr_t Snapshot;
+// Make a snapshot of allocator
+Snapshot allocSnapshot(void);
+// Restore a snapshot of allocator (frees all memory allocated since the snapshot was taken)
+void allocRestore(Snapshot snapshot);
+// Allocate some memory
+void *alloc(size_t bytes);
 
 // CORE
 void setFrameRate(int fps);

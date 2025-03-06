@@ -1,5 +1,6 @@
 
 #include <p5.h>
+
 typedef uint32_t Color;
 
 typedef struct {
@@ -7,9 +8,13 @@ typedef struct {
     Color color;
 } Point;
 
-#define POINTS_CAP 200
-static Point points[POINTS_CAP];
-int points_count = 0;
+typedef struct Points {
+    Point point;
+    struct Points *prev;
+    struct Points *next;
+} Points;
+
+Points *points = NULL;
 
 void push_point(int x, int y, Color c) {
     Point p = {
@@ -17,11 +22,20 @@ void push_point(int x, int y, Color c) {
         .y = y,
         .color = c
     };
-    if (points_count + 1 >= POINTS_CAP) {
-        createP("No more points allowed!");
-        return;
+
+    if (points == NULL) {
+        points = alloc(sizeof(*points));
+        points->point = p;
+        points->prev = NULL;
+        points->next = NULL;
+    } else {
+        Points *new_node = alloc(sizeof(*new_node));
+        memset(new_node, 0, sizeof(*new_node));
+        new_node->point = p;
+        new_node->next = points;
+        points->prev = new_node;
+        points = new_node;
     }
-    points[points_count++] = p;
 }
 
 const Color colors[] = {
@@ -70,10 +84,10 @@ void draw(void) {
         const int x = i - y * WIDTH;
         
         Point curr_point = {.x = x, .y = y};
-        
-        Point closest = points[0];
-        for (int j = 1; j < points_count; j++) {
-            Point p = points[j];
+
+        Point closest = points->point;
+        for (Points *node = points->next; node != NULL; node = node->next) {
+            Point p = node->point;
             if (distSq(curr_point, p) < distSq(curr_point, closest)) {
                 closest = p;
             }
@@ -83,8 +97,8 @@ void draw(void) {
     }
     updatePixels(pixels);
     
-    for (int i = 0; i < points_count; i++) {
-        Point p = points[i];
+    for (Points *node = points; node != NULL; node = node->next) {
+        Point p = node->point;
         strokeWeight(8);
         stroke(P5_WHITE);
         point(p.x, p.y);

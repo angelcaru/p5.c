@@ -76,13 +76,20 @@ mod wasm_panic {
 
 pub mod c {
     use p5::{Element, Graphics, Image, Sound};
+    pub type Snapshot = usize;
     extern "C" {
         // MATH
         pub fn sqrtf(x: f32) -> f32;
 
         // MEMORY MANAGEMENT
-        // Reset the heap
-        pub fn heapReset();
+        // TODO: wrap this in a struct that implements `Allocator`
+        // We have only a linear allocator for now
+        // Make a snapshot of allocator
+        pub fn allocSnapshot() -> Snapshot;
+        // Restore a snapshot of allocator (frees all memory allocated since the snapshot was taken)
+        pub fn allocRestore(snapshot: Snapshot);
+        // Allocate some memory
+        pub fn alloc(bytes: usize) -> *mut ();
 
         // CORE
         pub fn setFrameRate(fps: i32);
@@ -161,10 +168,6 @@ fn validate_cstr(cstr: &[u8]) {
 
 pub fn sqrtf(x: f32) -> f32 {
     unsafe { c::sqrtf(x) }
-}
-
-pub unsafe fn heapReset() {
-    c::heapReset()
 }
 
 // CORE

@@ -197,12 +197,21 @@ function loadWASM(url) {
             throw new Error(msg);
         },
 
-        sqrtf(x) {
-            return Math.sqrt(x);
+        allocSnapshot() {
+            if (heap_base === null) heap_base = exports.__heap_base.value;
+            return heap_base;
+        },
+        allocRestore(snapshot) {
+            heap_base = snapshot;
         },
 
-        heapReset() {
-            heap_base = null;
+        alloc(bytes) {
+            while (bytes % 8 !== 0) bytes++;
+            return alloc(wasm, bytes);
+        },
+
+        sqrtf(x) {
+            return Math.sqrt(x);
         },
 
         mouseX() {
