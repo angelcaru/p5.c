@@ -9,21 +9,20 @@ $ iexplore.exe localhost:6969/?dvd.wasm
 ```
 
 ## Making Your Own Program
-Simply write some boilerplate like this:
+See [standalone.html](./web/standalone.html), as well as [Makefile](./Makefile) for the compile command (it's quite long).
+The C code you need is something like this:
 ```c
 #include <p5.h>
 
-#define WIDTH  400
-#define HEIGHT 400
+#define WIDTH 640
+#define HEIGHT 480
 void setup(void) {
     createCanvas(WIDTH, HEIGHT);
 }
 
 void draw(void) {
-    background(P5_BLACK);
+    background(0x18, 0x18, 0x18);
 }
 ```
 
-and compile with the same command as seen in the [Makefile](./Makefile). To run it, change the URL
-to `http://localhost:6969/?your_program_name.wasm`.
 

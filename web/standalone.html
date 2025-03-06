@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Standalone example for p5.c</title>
+        <style>
+            html, body {
+                background-color: black;
+            }
+        </style>
+        <script type="text/javascript" src="./libs/p5.min.js"></script>
+        <script type="text/javascript" src="/p5.c.js"></script>
+        <script>
+            function preload() {
+                loadWASM("./dvd.wasm");
+            }
+        </script>
+    </head>
+    <body></body>
+</html>
