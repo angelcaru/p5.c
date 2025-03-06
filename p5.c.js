@@ -178,8 +178,7 @@ let preloadRan = false;
 
 let exports = null;
 
-let dropdown;
-function preload() {
+function loadWASM(url) {
     const imageTable = createTable("image");
     const soundTable = createTable("sound");
     const domTable = createTable("element");
@@ -291,7 +290,7 @@ function preload() {
         },
         loadPixels(arr_ptr) {
             grCurr().loadPixels();
-            
+
             memcpy(exports.memory.buffer, arr_ptr,
                    grCurr().pixels.buffer, 0,
                    grCurr().width * grCurr().height * grCurr().pixelDensity() * 4);
@@ -443,22 +442,12 @@ function preload() {
 
         __indirect_function_table: new WebAssembly.Table({ initial: 69, element: "anyfunc" }),
     });
-    const dropdown = select("#demo-select");
-    const wasm_file = "/web/" + document.location.search.slice(1);
-    if (wasm_file !== "/web/") {
-        dropdown.value(wasm_file);
-        WebAssembly.instantiateStreaming(fetch(wasm_file), {
-            env,
-        }).then(w => {
-            wasm = w;
-            exports = w.instance.exports
-            preloadRan = !("preload" in exports);
-        });
-        console.log(env);
-    }
-    ///////////////////////////////
-    dropdown.changed(() => {
-        document.location = "./?" + dropdown.value();
+    WebAssembly.instantiateStreaming(fetch(url), {
+        env,
+    }).then(w => {
+        wasm = w;
+        exports = w.instance.exports
+        preloadRan = !("preload" in exports);
     });
 }
 

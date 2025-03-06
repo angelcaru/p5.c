@@ -327,12 +327,12 @@ pub fn graphicsEnd() {
 
 pub struct UseGraphics(core::marker::PhantomData<()>);
 
-pub fn use_graphics(gr: &mut Graphics) -> UseGraphics<'_> {
+pub fn use_graphics(gr: &mut Graphics) -> UseGraphics {
     graphicsBegin(gr);
     UseGraphics(core::marker::PhantomData)
 }
 
-impl<'a> core::ops::Drop for UseGraphics<'a> {
+impl core::ops::Drop for UseGraphics {
     fn drop(&mut self) {
         unsafe { c::graphicsEnd() }
     }
